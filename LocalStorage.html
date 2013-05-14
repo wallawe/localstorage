@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Local Storage</title>
+  <meta charset="utf-8">
+  <script src="http://modernizr.com/downloads/modernizr-latest.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+  <h1>HTML5 Local Storage</h1>
+
+<script>
+  //check if browser is capable of html5 local storage
+  if (Modernizr.localstorage) {
+    console.log('local storage is available!');
+  } else {
+    alert("Your browser does not support HTML5's local storage. Please consider upgrading.")
+  };
+
+  localStorage.setItem('party', prompt("what party do you affiliate with?"));
+
+  var aff = localStorage.getItem('party');
+
+  document.write(aff);
+
+
+</script>
+
+</body>
+</html>

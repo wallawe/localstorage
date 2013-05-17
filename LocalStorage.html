@@ -7,24 +7,180 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 </head>
 <body>
-  <h1>HTML5 Local Storage</h1>
+<div class="container">
+  <div class="questions">
 
+    <h1>Party Identifier</h1>
+    
+    <form action="#" id="party-form" method="post" name="questions">
+
+      <p>What's your name?</p>
+      <input type="text" name="username"><br><br>
+
+      <p>Choose your political affiliation</p>
+      <input type="radio" name="party" value="democrat">Democrat<br>
+      <input type="radio" name="party" value="republican">Republican<br>
+      <input type="radio" name="party" value="libertarian">Libertarian<br><br>
+      <input type="submit" value="Submit" id="saveData">
+
+    </form>
+
+  </div>
+  <div class="results" style="display: none">
+    <h1>Congrats!</h1>
+    <p class="name">Your name is </p>
+    <p class="affiliation">You are a </p>
+    <button class="clearForm">Clear Data</button>
+  </div>
+</div>
 <script>
   //check if browser is capable of html5 local storage
   if (Modernizr.localstorage) {
-    console.log('local storage is available!');
-  } else {
-    alert("Your browser does not support HTML5's local storage. Please consider upgrading.")
-  };
+    
+    $(function() {
 
-  localStorage.setItem('party', prompt("what party do you affiliate with?"));
+        $("#saveData").click(function(e) {
 
-  var aff = localStorage.getItem('party');
+          e.preventDefault();
 
-  document.write(aff);
+          localStorage.setItem("flag","isSet");
+
+          var data = $("#party-form").serializeArray();
+          
+
+          $.each(data, function(i, obj){
+
+            localStorage.setItem(obj.name, obj.value);
+            $(".questions").slideUp(300);
+            $(".results").show(300);
+
+          });
+
+        });
+
+        if ( localStorage.getItem("flag") == "isSet" ) {
+
+
+          $(".questions").hide();
+          $(".results").show(300);
+
+          var showName = localStorage.getItem('username');
+          $(".name").append( showName );
+
+          var ShowParty = localStorage.getItem('party');
+          $(".affiliation").append( ShowParty );
+
+          
+
+        }
+
+        $(".clearForm").click(function() {
+
+          $(".results").hide();
+          $(".questions").show(300);
+          window.localStorage.clear();
+
+        });
+
+    });
+
+
+
+  } 
+
+  else {
+    alert("Your browser does not support HTML5's local storage. Please consider upgrading to Chrome.")
+};
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+  $("#add").click(function() {
+    localStorage.setItem('working', 'The data is working' );      
+    $("h2").append( localStorage.getItem('working') );
+  });
+
+  if ( 'working' != null) {
+      $("h2").append( localStorage.getItem('working') );
+  }
+
+
+  $("#clear").click(function() {
+    $("").remove();
+    window.localStorage.clear();
+  });
+
+
+  localStorage.setItem('party', prompt("What political party do you affiliate with?"));
+
+  var affiliation = localStorage.getItem('party');
+
+  document.write(affiliation);
+
+  var position = {};
+
+  position.president = "Barack Obama";
+  position.pres_min_age = 35;
+  position.speaker = {
+                    hair: "brown",
+                    age: 44
+                    };
+  localStorage.setItem( 'position', JSON.stringify(position) );
+
+  console.log( 
+    JSON.parse( 
+      localStorage.getItem('position') 
+      ) 
+    );
+
+  document.write(position.speaker.age);
+*/
+
 
 
 </script>
 
+<style>
+
+body {
+  font-family: "helvetica neue", arial;
+  font-weight: 200;
+}
+
+.container {
+  width: 500px;
+  border: 1px solid #ccc;
+  padding: 0px 30px 30px 30px;
+  margin: 40px auto;
+}
+
+</style>
 </body>
 </html>

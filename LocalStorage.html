@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,32 +6,116 @@
   <meta charset="utf-8">
   <script src="http://modernizr.com/downloads/modernizr-latest.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Italiana' rel='stylesheet' type='text/css'>
 </head>
 <body>
+<div class="header">
+  <h2>political identification quiz<h2>
+</div>
 <div class="container">
-  <div class="questions">
+  <div class="about-user">
 
-    <h1>Party Identifier</h1>
+    <h1>Political Identifier</h1>
     
-    <form action="#" id="party-form" method="post" name="questions">
+    <form action="#" id="party-form" name="questions">
 
       <p>What's your name?</p>
       <input type="text" name="username"><br><br>
 
-      <p>Choose your political affiliation</p>
-      <input type="radio" name="party" value="democrat">Democrat<br>
-      <input type="radio" name="party" value="republican">Republican<br>
-      <input type="radio" name="party" value="libertarian">Libertarian<br><br>
-      <input type="submit" value="Submit" id="saveData">
+      <p>Which party do you closest identify with?</p>
+      <input type="radio" name="party" value="Democrat" id="dem">
+      <label for="dem">Democrat</label><br>
+      <input type="radio" name="party" value="Republican" id="rep">
+      <label for="rep">Republican</label><br>
+      <input type="radio" name="party" value="Libertarian" id="liberty">
+      <label for="liberty">Libertarian</label><br>
+      <input type="submit" value="Next" class="btn" id="saveData">
 
     </form>
 
   </div>
+  <div class="questions" style="display: none;">
+    <ol>
+      <form action="#" id="question-form" name="question-form">
+      <li>Should we expand our military presence and budget or cut military spending and bring the troops home?</li>
+        <input type="radio" name="wars" id="home" value="4">
+        <label for="home">Bring the troops home, cut the budget</label>
+        <input type="radio" name="wars" id="stay" value="2">
+        <label for="stay">Expand our presence/At least keep it where it is</label>
+
+      <li>Do you support gays' rights to get married?</li>
+        <input type="radio" name="gays" id="no2" value="2">
+        <label for="no2">No</label>
+        <input type="radio" name="gays" id="yes2" value="4">
+        <label for="yes2">Yes</label>
+
+      <li>Do you support increased gun control?</li>
+        <input type="radio" name="guns" id="yes3" value="1">
+        <label for="yes3">Yes</label>
+        <input type="radio" name="guns" id="no3" value="5">
+        <label for="no3">No</label>
+
+      <li>Should marijuana be decriminalized?</li>
+        <input type="radio" name="mj" id="yes4" value="4">
+        <label for="yes4">Yes</label>
+        <input type="radio" name="mj" id="no4" value="2">
+        <label for="no4">No</label>
+
+      <li>How do you feel about federal income taxes?</li>
+        <input type="radio" name="taxes" id="tax-a" value="1">
+        <label for="tax-a">We should increase taxes on the rich, decrease on the lower classes</label>
+        <input type="radio" name="taxes" id="tax-b" value="2">
+        <label for="tax-b">Cut taxes for the rich</label>
+        <input type="radio" name="taxes" id="tax-c" value="3">
+        <label for="tax-c">There shouldn't be a federal income tax at all</label>
+
+      <li>Are you pro-choice or pro-life?</li>
+        <input type="radio" name="abortion" id="abort-a" value="2">
+        <label for="abort-a">Pro-life</label>
+        <input type="radio" name="abortion" id="abort-b" value="4">
+        <label for="abort-b">Pro-choice, a baby is not yet a human.</label>
+
+<!--
+      <li></li>
+        <input type="radio" name="" id="" value="">
+        <label for=""></label>
+
+      <li></li>
+        <input type="radio" name="" id="" value="">
+        <label for=""></label>
+
+
+      <li></li>
+        <input type="radio" name="" id="" value="">
+        <label for=""></label>
+
+
+      <li></li>
+        <input type="radio" name="" id="" value="">
+        <label for=""></label>
+
+
+      <li></li>
+        <input type="radio" name="" id="" value="">
+        <label for=""></label>
+-->
+
+
+        <input type="submit" value="Submit" class="btn" id="question-submit">
+      </form>
+    </ol>
+  </div>
   <div class="results" style="display: none">
-    <h1>Congrats!</h1>
-    <p class="name">Your name is </p>
-    <p class="affiliation">You are a </p>
-    <button class="clearForm">Clear Data</button>
+    <h1>Your results, </h1>
+    <p class="affiliation">Stated political affiliation: </p>
+
+    <h2>Based on your answers, here are your percentages:</h2>
+    <h3 class="d-per">Democratic: </h3>
+    <h3 class="r-per">Republican: </h3>
+    <h3 class="l-per">Libertarian: </h3>
+
+    <p><i>This data is now stored locally in your browser using HTML5 LocalStorage!</i></p>
+    <button class="clearForm btn">Clear Data</button>
   </div>
 </div>
 <script>
@@ -39,52 +124,112 @@
     
     $(function() {
 
+        var doShit = function() {
+          var showName = localStorage.getItem('username');
+          $("h1").append( showName );
+
+          var ShowParty = localStorage.getItem('party');
+          $(".affiliation").append( ShowParty );
+          
+          var war = parseInt(localStorage.getItem('wars'));
+          var gay = parseInt(localStorage.getItem('gays'));
+          var gun = parseInt(localStorage.getItem('guns'));
+          var mj = parseInt(localStorage.getItem('mj'));
+          var tax = parseInt(localStorage.getItem('taxes'));
+          var abortion = parseInt(localStorage.getItem('abortion'));
+          var democrat = 0;
+          var republican = 0;
+          var libertarian = 0;
+
+          var totRes = [war, gay, gun, mj, tax, abortion];
+          var numQuestions = totRes.length;
+
+          for (i = 0; i < totRes.length; i++) {
+
+            switch (totRes[i]) {
+              case 1:
+                democrat += 1;
+                break
+              case 2:
+                republican += 1;
+                break
+              case 3:
+                libertarian += 1;
+                break
+              case 4:
+                libertarian += 1;
+                democrat += 1;
+                break
+              case 5:
+                libertarian += 1;
+                republican += 1;
+                break
+              default:
+                console.log("Some sort of error occured");
+            }
+
+          };
+
+          var partyPercent = function(party) {
+          return (party / (numQuestions) * 100).toFixed(1) + "%";
+         };
+
+          $(".d-per").append(partyPercent(democrat));
+          $(".l-per").append(partyPercent(libertarian));
+          $(".r-per").append(partyPercent(republican));
+        }
+      
         $("#saveData").click(function(e) {
+
+          e.preventDefault();
+
+          var data = $("#party-form").serializeArray();
+          
+          $.each(data, function(i, obj){
+
+            localStorage.setItem(obj.name, obj.value);
+            $(".about-user").slideUp(300);
+            $(".questions").show(300);
+          });
+
+
+        $("#question-submit").click(function(e) {
 
           e.preventDefault();
 
           localStorage.setItem("flag","isSet");
 
-          var data = $("#party-form").serializeArray();
-          
+          var data = $("#question-form").serializeArray();
 
-          $.each(data, function(i, obj){
+          $.each(data, function(i, obj) {
 
-            localStorage.setItem(obj.name, obj.value);
-            $(".questions").slideUp(300);
-            $(".results").show(300);
-
+              localStorage.setItem(obj.name, obj.value);
+              $(".questions").slideUp(300);
+              $(".about-user").hide();
+              $(".results").show(300);
           });
-
+          doShit();
         });
 
-        if ( localStorage.getItem("flag") == "isSet" ) {
+      });
 
+        if ( (localStorage.getItem("flag") == "isSet") ) {
 
           $(".questions").hide();
+          $(".about-user").hide();
           $(".results").show(300);
 
-          var showName = localStorage.getItem('username');
-          $(".name").append( showName );
+          doShit();
+        }//end if flagset conditional
 
-          var ShowParty = localStorage.getItem('party');
-          $(".affiliation").append( ShowParty );
-
+        $(".clearForm").click(function() { 
           
-
-        }
-
-        $(".clearForm").click(function() {
-
-          $(".results").hide();
-          $(".questions").show(300);
           window.localStorage.clear();
+          window.location.reload();
 
         });
 
     });
-
-
 
   } 
 
@@ -92,93 +237,93 @@
     alert("Your browser does not support HTML5's local storage. Please consider upgrading to Chrome.")
 };
 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  $("#add").click(function() {
-    localStorage.setItem('working', 'The data is working' );      
-    $("h2").append( localStorage.getItem('working') );
-  });
-
-  if ( 'working' != null) {
-      $("h2").append( localStorage.getItem('working') );
-  }
-
-
-  $("#clear").click(function() {
-    $("").remove();
-    window.localStorage.clear();
-  });
-
-
-  localStorage.setItem('party', prompt("What political party do you affiliate with?"));
-
-  var affiliation = localStorage.getItem('party');
-
-  document.write(affiliation);
-
-  var position = {};
-
-  position.president = "Barack Obama";
-  position.pres_min_age = 35;
-  position.speaker = {
-                    hair: "brown",
-                    age: 44
-                    };
-  localStorage.setItem( 'position', JSON.stringify(position) );
-
-  console.log( 
-    JSON.parse( 
-      localStorage.getItem('position') 
-      ) 
-    );
-
-  document.write(position.speaker.age);
-*/
-
-
-
 </script>
 
 <style>
 
 body {
-  font-family: "helvetica neue", arial;
+  font-family: 'Italiana', serif;
   font-weight: 200;
+  color: #333;
 }
 
 .container {
   width: 500px;
+  background: #f9f9f9;
   border: 1px solid #ccc;
   padding: 0px 30px 30px 30px;
-  margin: 40px auto;
+  margin: 80px auto;
+  border-radius: 4px;
+  box-shadow: 0px 0px 15px 0px #888;
+}
+
+.header {
+  background: #f9f9f9;
+  width: 100%;
+  height: 40px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+}
+.header > h2 {
+  text-align: center;
+  margin-top: 5px;
+}
+
+li {margin: 10px 0;}
+
+p {margin: 10px 0;}
+
+.btn {
+  margin: 10px 0px;
+  -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+  -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+  box-shadow:inset 0px 1px 0px 0px #ffffff;
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+  background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+  background-color:#ededed;
+  -moz-border-radius:6px;
+  -webkit-border-radius:6px;
+  border-radius:6px;
+  border:1px solid #dcdcdc;
+  display:inline-block;
+  color:#777777;
+  font-family:arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 24px;
+  text-decoration:none;
+  text-shadow:1px 1px 0px #ffffff;
+}.btn:hover {
+  cursor: pointer;
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+  background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+  background-color:#dfdfdf;
+}.btn:active {
+  position:relative;
+  top:1px;
+}
+
+input[type=text] {
+  font-family: 'Italiana', serif;
+  border: 1px solid #aaa;
+  padding: 5px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 14px;
+  width: 250px;
+}
+
+input[type=radio] {
+  display: inline-block;
+  width: 3%;
+  vertical-align: top;
+}
+label {
+  display: inline-block;
+  width: 94%;
 }
 
 </style>
